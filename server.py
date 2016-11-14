@@ -22,17 +22,21 @@ class EchoHandler(socketserver.DatagramRequestHandler):
         line = self.rfile.read()
         data = line.decode('utf-8')
         chops = data.split(' ')
-        print("El cliente nos manda: " + line.decode('utf-8'))
         
         if chops[0] == 'INVITE':
+            print("El cliente nos manda: " + data)
             self.wfile.write(b"SIP/2.0 100 Trying\r\n\r\n")
             self.wfile.write(b"SIP/2.0 180 Ring\r\n\r\n")
 
-        if chops[0] == 'ACK':
-            pass
+        elif chops[0] == 'ACK':
+            print("El cliente nos manda: " + data)
+            aEjecutar = 'mp32rtp -i 127.0.0.1 -p 23032 < ' + audio
+            print("Vamos a ejecutar", aEjecutar)
+            os.system(aEjecutar)
         
-        if chops[0] == 'BYE':
-            pass
+        elif chops[0] == 'BYE':
+            print("El cliente nos manda: " + data)
+            
                 
         self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")
 
@@ -40,6 +44,7 @@ if __name__ == "__main__":
     # Creamos servidor de eco y escuchamos
     
     PORT = int(sys.argv[2])
+    audio = sys.argv[3]
     serv = socketserver.UDPServer(('', PORT), EchoHandler)
     print("Listening...")
     try:
