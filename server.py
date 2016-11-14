@@ -41,8 +41,10 @@ class EchoHandler(socketserver.DatagramRequestHandler):
             print("El cliente nos manda: " + data)
             self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")
             
+        elif METHOD not in ['INVITE', 'ACK', 'BYE']:
+            self.wfile.write(b"SIP/2.0 405 Method Not Allowed\r\n\r\n")
         else:
-            self.wfile.write(b"SIP/2.0 405 Method Not Allowed\r\n\r\n")    
+            self.wfile.write(b"SIP/2.0 400 Bad Request\r\n\r\n") 
             
                 
         
