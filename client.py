@@ -38,11 +38,15 @@ data = my_socket.recv(1024)
 
 print('Recibido -- ', data.decode('utf-8'))
 
-ACKLINE = str('ACK' + ' ' + RECEIVER)
-print("Enviando: " + ACKLINE)
-my_socket.send(bytes(ACKLINE, 'utf-8') + b'\r\n')
-print("Terminando socket...")
+if METHOD == 'INVITE':
+    ACKLINE = str('ACK' + ' ' + RECEIVER)
+    print("Enviando: " + ACKLINE)
+    my_socket.send(bytes(ACKLINE, 'utf-8') + b'\r\n')
 
-# Cerramos todo
-my_socket.close()
-print("Fin.")
+elif METHOD == 'BYE':
+
+    print("Terminando socket...")
+
+    # Cerramos todo
+    my_socket.close()
+    print("Fin.")
