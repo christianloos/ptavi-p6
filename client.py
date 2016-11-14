@@ -16,6 +16,7 @@ try:
     
 except:
     sys.exit("Usage: python3 client.py method receiver@IP:SIPport")
+    
 
 SERVER = 'localhost'
 chops = RECEIVER.split('@')    
@@ -35,10 +36,11 @@ print("Enviando: " + LINE)
 my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
 data = my_socket.recv(1024)
 
-
 print('Recibido -- ', data.decode('utf-8'))
 
+
 if METHOD == 'INVITE':
+    
     ACKLINE = str('ACK' + ' ' + RECEIVER)
     print("Enviando: " + ACKLINE)
     my_socket.send(bytes(ACKLINE, 'utf-8') + b'\r\n')
