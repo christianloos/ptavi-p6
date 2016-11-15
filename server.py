@@ -24,6 +24,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
         chops = data.split(' ')
         METHOD = chops[0]
         
+        #Detección de método SIP
         if METHOD == 'INVITE':
             print("El cliente nos manda: " + data)
             self.wfile.write(b"SIP/2.0 100 Trying\r\n\r\n")
@@ -33,21 +34,19 @@ class EchoHandler(socketserver.DatagramRequestHandler):
         elif METHOD == 'ACK':
             print("El cliente nos manda: " + data)
             aEjecutar = 'mp32rtp -i 127.0.0.1 -p 23032 < ' + audio
-            print("Vamos a ejecutar", aEjecutar)
+            print("Executing...", aEjecutar)
             print()
             os.system(aEjecutar)
-        
+
         elif METHOD == 'BYE':
             print("El cliente nos manda: " + data)
             self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")
-            
+
         elif METHOD not in ['INVITE', 'ACK', 'BYE']:
             self.wfile.write(b"SIP/2.0 405 Method Not Allowed\r\n\r\n")
         else:
-            self.wfile.write(b"SIP/2.0 400 Bad Request\r\n\r\n") 
-            
-                
-        
+            self.wfile.write(b"SIP/2.0 400 Bad Request\r\n\r\n")
+
 
 if __name__ == "__main__":
     # Creamos servidor de eco y escuchamos
@@ -57,10 +56,10 @@ if __name__ == "__main__":
         audio = sys.argv[3]
     except:
         sys.exit("Usage: python3 server.py IP port audio_file")
-        
+
     serv = socketserver.UDPServer(('', PORT), EchoHandler)
     print("Listening...")
-    
+
     try:
         serv.serve_forever()
     except KeyboardInterrupt:
