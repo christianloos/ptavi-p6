@@ -16,15 +16,14 @@ class EchoHandler(socketserver.DatagramRequestHandler):
 
     def handle(self):
         # Escribe dirección y puerto del cliente (de tupla client_address)
-        self.wfile.write(b"Hemos recibido tu peticion\r\n\r\n")
 
         # Leyendo línea a línea lo que nos envía el cliente
         line = self.rfile.read()
         data = line.decode('utf-8')
         chops = data.split(' ')
         METHOD = chops[0]
-        
-        #Detección de método SIP
+
+        # Detección de método SIP
         if METHOD == 'INVITE':
             print("El cliente nos manda: " + data)
             self.wfile.write(b"SIP/2.0 100 Trying\r\n\r\n")
