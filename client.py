@@ -21,7 +21,7 @@ IP = chops[1][:-5]
 PORT = int(chops[1][-4:])
 
 # Contenido que vamos a enviar
-LINE = str(METHOD + ' ' + RECEIVER)
+LINE = str(METHOD + ' sip:' + LOGIN + '@' + IP + ' SIP/2.0\r\n')
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -34,7 +34,7 @@ data = my_socket.recv(1024)
 print('Recibido -- ', data.decode('utf-8'))
 
 if METHOD == 'INVITE':
-    ACKLINE = str('ACK' + ' ' + RECEIVER)
+    ACKLINE = str('ACK' + ' sip:' + LOGIN + '@' + IP + ' SIP/2.0\r\n')
     print("Enviando: " + ACKLINE)
     my_socket.send(bytes(ACKLINE, 'utf-8') + b'\r\n')
 
